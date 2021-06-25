@@ -1,0 +1,46 @@
+@charset 'utf-8';
+
+.label-header-wrapper {
+    display: flex;
+    justify-content: space-around;
+    margin:40px 0;
+}
+
+.box {
+    width:  150px;
+    height: 150px;
+    border-radius: 10px;
+    font-size: 5rem;
+    line-height: 150px;
+    text-align: center;
+}
+
+.tag-green {
+    background-color:green;
+    color:#FFF;
+}
+
+.tag-red {
+    background-color:red;
+    color:#FFF;
+}
+
+.tag-blue {
+    background-color:blue;
+    color:#FFF;
+}
+
+.tag-gray {
+    background-color:#DADADA;
+    color:#000;
+}
+
+.box-qr {
+    width: 150px;
+    height: 150px;
+    text-align:center;
+    line-height: 150px;
+}
+.qr {
+    width: 150px;
+}

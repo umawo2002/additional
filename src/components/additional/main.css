@@ -1,0 +1,386 @@
+@charset "utf-8";
+
+/* ========== すべて共通 ========== */
+html, body {
+	font-size: 16px;
+	font-family: sans-serif;
+	color: #393939;
+	background: #efefef;
+}
+body, div, p, h1, h2, h3, h4, ul, figure {
+	margin: 0;
+	padding: 0;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+ }
+ 
+p, td, th, li {
+	line-height: 1.8;
+}
+img {
+	width: 100%;
+	height: auto;
+}
+a {
+	color: #709a00;
+}
+a:hover {
+	color: #95cd00;
+}
+a:active {
+	color: #4b6700;
+}
+.img-responsive {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+/* 共通の見出し */
+main h1 {
+	margin-bottom: 1rem;
+	border-bottom: 1px dashed #c84040;
+	font-weight: normal;
+	font-size: 1.6rem;
+}
+
+.container {
+	margin: 0 auto;
+	padding-left: 10px;
+	padding-right: 10px;
+	max-width: 1600px;
+}
+@media screen and (min-width: 768px) {
+	.container {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+/* ========== ヘッダー ========== */
+header {
+	background:#66CDAA;
+}
+.header-inner {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.header-logo {
+	padding: 10px 0;
+	width: 160px;
+	height: 37px;
+}
+.menu-btn {
+	padding: 10px 0;
+	border: 1px solid #dadada;
+	border-radius: 10px 10px 0 0;
+	width: 40px;
+	height: 40px;
+	/* background: url(../images/hamburger.png) no-repeat center center; */
+	background-size: contain;
+}
+
+/* min-width以下　ハンバーガー */
+@media screen and (min-width: 768px) {
+	.header-logo {
+		padding: 20px 0;
+		width: 200px;
+		height: 46px;
+	}
+	.menu-btn {
+		display: none;
+	}
+}
+
+/* ========== ナビゲーション ========== */
+nav {
+	/* background: #393939; */
+	background: linear-gradie(#393939, #FFF);
+}
+.navbar {
+	display: none;
+	list-style-type: none;
+	/* display: flex !important; */
+}
+/* .navbar li:first-child {
+	margin-right: auto;
+} */
+
+.navbar a {
+	display: block;
+	padding: 0.6rem 0;
+	color: #fff;
+	text-decoration: none;
+}
+.navbar a:hover {
+	background: #c84040;
+	border-radius: 10px 10px 0 0;
+	transition: 0.8s;
+}
+
+@media screen and (min-width: 768px) {
+	.navbar {
+		display: flex !important;
+	}
+	.navbar li {
+		flex: 1 1 auto;
+		text-align: center;
+	}
+	.navbar a.nav-current {
+		background: #c84040;
+	}
+}
+    
+ 
+.additionalWrapper {
+    display:flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+
+.additionalInfoWrapper {    
+    padding:5px;
+    /* border: 3px solid #dadada; */
+    border-radius: 5px;
+    width:440px;
+    height: 300px;
+    margin:10px;
+    line-height:2rem;
+    font-size: 1.2rem;
+    box-shadow: 0px 10px 10px -5px rgba(0,0,0,0.5);
+    transition: 0.8s;
+}
+
+.buzai {
+    border: 3px solid orange;
+}
+.iron {
+    border: 3px solid 	#66CDAA;
+}
+
+.additionalInfoWrapper:hover {
+    opacity: 1;
+    /* border: 3px solid 	#66CDAA; */
+    /* border: 3px solid #c84040; */
+    background-color:lightgoldenrodyellow;
+    animation-play-state: paused;
+    cursor: pointer;
+}
+
+.additionalInfoFlushWrapp {
+    background-color: red;
+}
+
+.additioalInfoHeader {
+    position:relative;
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+}
+.tagNumber {
+    border:1px solid #dadada;
+    border-radius: 5px;
+    width: 50px;
+    height: 50px;
+    text-align:center;
+    line-height:50px;
+    font-size:1.5rem;
+    color:lightyellow;
+}
+
+.tagCnt {
+    /* padding:.3em .9em; */
+    position:absolute;
+    top:0;
+    left:40px;
+    font-size:0.8rem;
+    width:20px;
+    height:20px;
+    /* border: 1px solid #dadada; */
+    border-radius:1em;
+    text-align:center;
+    line-height:20px;
+    z-index:1;
+}
+
+.tagCntBuzai {
+    background-color: orange;
+}
+.tagCntIron {
+    background-color: #66CDAA;
+}
+
+.green {
+    background-color:green;
+}
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color:blue;
+}
+
+.glay {
+    background-color:#393939;
+}
+
+.additonalInfoTableWrapp {
+
+}
+
+.additonalInfoTable {
+    border-collapse: collapse;
+    width:100%;
+    /* background-color:azure; */
+}
+
+.additionalInfoTable th, td {
+    border: 1px solid #dadada;
+    padding-left: 5px;
+}   
+
+.add__teiName {
+    padding-left: 10px;
+    height: 50px;
+    line-height:50px;
+    font-weight: bold;
+    /* background-color: yellow; */
+}
+
+.add__dueDate {
+    font-weight: normal;
+}
+
+.operButtonWrapp {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    font-size: 0.8rem;
+}
+/*
+*	点滅時
+*/
+.backgroundFlush {
+	animation: flash 0.5s linear infinite;
+	border: 1px solid #696969;
+	border-collapse: collapse;
+}
+
+@keyframes flash {
+  0%,100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+
+ 
+/** ラベル印刷選択画面 ***/
+.lbl__wrapper {
+    display:flex;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+.lbl__pageWrapper {
+    margin:10px;
+    padding: 5px;
+    height: 786x;
+    width:400px;
+    border:3px solid #dcdcdc;
+    border-radius: 5px;
+    transition: 0.5s;
+    box-shadow: 0px 10px 10px -5px rgba(0,0,0,0.5);
+}
+
+.lbl__pageWrapper:hover {
+    border: 3px solid #c84040;
+    background-color:lightyellow;
+}
+.labelHeader {
+    display:flex;
+    text-align: center;
+    /* border: 1px solid #000; */
+}
+
+.labelFooter {
+    display:none;
+}
+
+.labelNumber {
+    width: 80px;
+    height: 80px;
+    font-size: 3rem;
+    color:lightyellow;
+    text-align: center;
+    line-height:80px;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+}
+
+/* .labelQr {    
+
+    background-color: #c84040;
+}
+.qrCode {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+} */
+
+.makerName {
+    font-size: 1.5rem;
+}
+
+.dueDate {
+    font-size: 2rem;
+    border-bottom: 1px solid black;
+}
+
+.teiName {
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+    height: 50px;
+    line-height: 70px;
+}
+
+.productName {
+    height: 70px;
+    line-height: 100px;
+    border-bottom: 1px solid black;
+}
+
+.qty {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid black;
+    font-size: 2.2rem;
+    height: 80px;
+    line-height: 100px;
+}
+
+.qtySize {
+    font-size: 3rem;
+}
+.qtyTotalSize {
+    font-size: 2rem;
+}
+
+.address {
+    font-size: 1rem;
+}
+
