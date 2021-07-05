@@ -1,3 +1,7 @@
+// 追加依頼を受け付ける
+export const ACCEPT_ORDER = 'ACCEPT_ORDER'
+
+
 export const ADD_EVENT_LOG = 'ADD_EVENT_LOG'
 export const DELETE_ADDITIONAL_ORDER = 'DELETE_ADDITIONAL_ORDER'
 
@@ -10,6 +14,9 @@ export const PRINT_TAG_DONE = 'PRINT_TAG_DONE'
 export const PRINT_INVOICE_DONE = 'PRINT_INVOICE_DONE'
 // 明細表出力済
 export const PRINT_DETAIL_DONE = 'PRINT_DETAIL_DONE'
+
+export const PRINT_INVOICE_CSV = 'PRINT_INVOICE_CSV'
+
 
 //
 //  各ラベルの操作

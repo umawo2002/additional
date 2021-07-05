@@ -1,58 +1,56 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useRef } from 'react'
+import { CSVLink } from 'react-csv';
 import AppContext from '../contexts/AppContext'
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Grid from '@material-ui/core/Grid';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import ja from "date-fns/locale/ja"
+import { headers } from '../data/invoice_data'
+import { getDay } from 'date-fns';
+import { dateYMD } from '../utils/common'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
+}));
 
 const Invoice = () => {
+    const classes = useStyles()
     const { state } = useContext(AppContext)
-
-    console.log(state.additionalData[0])
 
     const src = state.additionalData[0]
 
-    // var states = [
-    //     { code: "CA", name: "California" },
-    //     { code: "HI", name: "Hawaii" },
-    //     { code: "TX", name: "Texas" },
-    //     { code: "WA", name: "Washington" }];
-    // var options = states.map(
-    //     (n) => (
-    //         <option key={n.code} value={n.code}>
-    //             {n.name}
-    //         </option>
-    //     )
-    // );
+    const [manageNo, setManageNo] = useState(src.order_no)
+    const [selectedDate, setSelectedDate] = useState(dateYMD(Date()))
+    const [selectedDueDate, setSelectedDueDate] = useState(src.due_date);
+    const [timeZoneCateStatus, setTimeZoneCateStatus] = useState('')
+    const [distPostNo, setDistPostNo] = useState('')
+    const [distPrefectures, setDistPrefectures] = useState(src.prefectures)
+    const [distPlace, setDistPlace] = useState(src.place)
+    const [distPlace2, setDistPlace2] = useState('')
+    const [distName, setDistName] = useState(src.dist_name)
+    const [distTelNo, setDistTelNo] = useState(src.dist_tel_no)
+    const [srcTelNo, setSrcTelNo] = useState('0297-27-1611')
+    const [srcPostNo, setSrcPostNo] = useState('303-0046')
+    const [srcAddress, setSrcAddress] = useState('茨城県常総市内守谷町きぬの里1-3-3')
+    const [srcName, setSrcName] = useState('潮田 正人')
+    const [hinName, setHinName] = useState(src.cate_name)
 
-    let states = [
-        { code: 0, name: "発払い" },
-        { code: 2, name: "コレクト" },
-        { code: 3, name: "ＤＭ便" },
-        { code: 4, name: "タイム" },
-        { code: 5, name: "着払い" },
-        { code: 7, name: "ネコポス" },
-        { code: 8, name: "宅急便コンパクト" },
-        { code: 9, name: "宅急便コンパクトコレクト" }
-    ]
+    const [isSubmit, setIsSubmit] = useState(false)
 
-    const options = states.map(
-        (n) => (
-            <option key={n.code} value={n.code}>
-                {n.name}
-            </option>
-        )
-    );
+    const [dat, setDat] = useState([])
 
-    let coolCate = [
-        { code: 0, name: "通常" },
-        { code: 1, name: "クール冷凍" },
-        { code: 2, name: "クール冷蔵" }
-    ]
-
-    const coolOptions = coolCate.map(
-        (n) => (
-            <option key={n.code} value={n.code} >
-                {n.name}
-            </option>
-        )
-    )
+    // const submitRef = useRef()
 
     let timeZoneCate = [
         { code: '', name: "指定なし" },
@@ -64,172 +62,143 @@ const Invoice = () => {
         { code: '0010', name: "午前10時まで" },
         { code: '0017', name: "午後5時まで" }
     ]
+    const handleDateChange = (date) => {
+        setSelectedDate(dateYMD(date))
+        console.log(selectedDate)
+    };
 
+    const handleDueDateChange = (date) => {
+        setSelectedDueDate(dateYMD(date))
+        console.log(selectedDueDate)
+    };
 
-    const timeZoneOptions = timeZoneCate.map(
-        (n) => (
-            <option key={n.code} value={n.code} >
-                {n.name}
-            </option>
-        )
-    )
-
+    const handleSubmit = (e) => {
+        setDat([
+            {
+                orderNo: manageNo,
+                invoiceCate: "0",
+                coolCate: "0",
+                shipDate: selectedDate,
+                dueDate: selectedDueDate,
+                timeZone: timeZoneCateStatus,
+                distTelNo: distTelNo,
+                distPostNo: distPostNo,
+                distAddress: distPrefectures + distPlace + distPlace2,
+                distName: distName,
+                distKeisyou: "様",
+                srcTelNo: srcTelNo,
+                srcPostNo: srcPostNo,
+                srcAddress: srcAddress,
+                srcName: srcName,
+                srcHinName: hinName,
+                custCode: "029727161101",
+                unchinCode: "01"
+            }
+        ])
+        console.log(dat)
+        setIsSubmit(!isSubmit)
+        // isSubmit && 
+        // setTimeout(
+        //     submitRef.current.link.click(), 1000
+        // )
+        e.preventDefault();
+    }
 
     return (
         <React.Fragment>
-            <header>
+            {/* <header>
                 <nav>
                     <div className='header-inner'>追加依頼サポートシステム</div>
                 </nav>
-            </header>
+            </header> */}
             <main>
-                <table>
-                    <tr>
-                        <th>お客様管理番号</th>
-                        <td>
-                            <input type='text' value={src.order_no} /></td>
-                    </tr>
+                <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+                    <div style={{ padding: 20 }}>
+                        <Grid container spacing={3}>
+                            <Grid container item xs={12} spacing={1}>
+                                <TextField required label="お客様管理番号(受注番号など)" defaultValue={manageNo} onChange={setManageNo} />
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ja}>
+                                    <KeyboardDatePicker
+                                        disableToolbar
+                                        variant="inline"
+                                        format="yyyy/MM/dd"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="出荷予定日"
+                                        value={selectedDate}
+                                        minDate={new Date()}
+                                        onChange={date => handleDateChange(date)}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                    />
+                                </MuiPickersUtilsProvider>
 
-                    <tr>
-                        <th>送り状種類</th>
-                        <td>
-                            <select >
-                                {options}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>クール区分</th>
-                        <td>
-                            <select>
-                                {coolOptions}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>伝票番号</th>
-                        <td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>出荷予定日</th>
-                        <td>
-                            <input type='date' value={src.dod} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け予定日</th><td>
-                            <input type='date' value={src.due_date} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>配達時間帯</th><td>
-                            <select>
-                                {timeZoneOptions}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先郵便番号</th><td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先住所(都道府県)</th><td>
-                            <input type='text' value={src.prefectures} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先住所(市区町村)</th><td>
-                            <input type='text' value={src.place} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先住所(番地、その他)</th><td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先名(監督)</th><td>
-                            <input type='text' value={src.director_name} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先名(ｶﾅ)</th><td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>敬称</th><td>
-                            <input type='text' value='様' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先電話番号</th><td>
-                            <input type='text' value={src.director_tel_name} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先名(基礎業者)</th><td>
-                            <input type='text' value={src.foundation_contractor_name} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先名(ｶﾅ)</th><td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>敬称</th><td>
-                            <input type='text' value='様' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>お届け先電話番号</th><td>
-                            <input type='text' value={src.foundation_contractor_tel_number} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ご依頼主電話番号</th><td>
-                            <input type='text' value={src.order_no} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ご依頼主郵便番号</th><td>
-                            <input type='text' value={src.order_no} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ご依頼主住所</th><td>
-                            <input type='text' value={src.order_no} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ご依頼主名</th><td>
-                            <input type='text' value={src.order_no} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ご依頼主名(ｶﾅ)</th><td>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ja}>
+                                    <KeyboardDatePicker
+                                        disableToolbar
+                                        variant="inline"
+                                        format="yyyy/MM/dd"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="お届け予定日"
+                                        value={selectedDueDate}
+                                        onChange={date => handleDueDateChange(date)}
+                                        minDate={new Date()}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                        }}
+                                    />
+                                </MuiPickersUtilsProvider>
 
-                            <input type='text' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>品名１</th><td>
-                            <input type='text' value={src.cate} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th></th><td>
-                            <input type='text' />
-                        </td>
-                    </tr>
-                </table>
-            </main>
+
+                                <InputLabel variant="standard" htmlFor="timeZoneCate">
+                                    配達時間帯
+                                </InputLabel>
+                                <NativeSelect
+                                    defaultValue={timeZoneCateStatus}
+                                    onChange={(e) => setTimeZoneCateStatus(e.target.value)}
+                                    inputProps={{
+                                        name: 'timeZoneCate',
+                                        id: 'timeZoneCate',
+                                    }}
+                                >
+                                    {timeZoneCate.map((n) =>
+                                        <option value={n.code}>
+                                            {n.name}
+                                        </option>
+                                    )
+                                    }
+                                </NativeSelect>
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
+                                <TextField required label="お届け先郵便番号" defaultValue={distPostNo} onChange={(e) => setDistPostNo(e.target.value)} />
+                                <TextField required label="お届け先住所(都道府県)" defaultValue={distPrefectures} onChange={(e) => setDistPrefectures(e.target.value)} />
+                                <TextField required label="お届け先住所(市区町村)" defaultValue={distPlace} onChange={(e) => setDistPlace(e.target.value)} />
+                                <TextField required label="お届け先住所(番地、その他)" defaultValue={distPlace2} onChange={(e) => setDistPlace2(e.target.value)} />
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
+                                <TextField required label={'お届け先(' + src.orderer + ')'} defaultValue={distName} onChange={(e) => setDistName(e.target.value)} />
+                                <TextField required label={'お届け先電話番号(' + src.orderer + ')'} defaultValue={distTelNo} onChange={(e) => setDistTelNo(e.target.value)} />
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
+                                <TextField required label="ご依頼主電話番号" defaultValue={srcTelNo} onChange={(e) => setSrcTelNo(e.target.value)} />
+                                <TextField required label="ご依頼主郵便番号" defaultValue={srcPostNo} onChange={(e) => setSrcPostNo(e.target.value)} />
+                                <TextField required label="ご依頼主住所" defaultValue={srcAddress} onChange={(e) => setSrcAddress(e.target.value)} />
+                                <TextField required label="ご依頼主名" defaultValue={srcName} onChange={(e) => setSrcName(e.target.value)} />
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
+                                <TextField required label="品名１" defaultValue={hinName} onChange={(e) => setHinName(e.target.value)} />
+                            </Grid>
+                        </Grid>
+                        <button type="submit">CSV作成</button>
+                        {isSubmit && <CSVLink data={dat} headers={headers} filename={manageNo + ".csv"}> 生成 </CSVLink>}
+                    </div>
+                </form>
+            </main >
         </React.Fragment >
     )
 }
-
 export default Invoice

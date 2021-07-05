@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, Route, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  // Button,
+  Button,
   Divider,
   Drawer,
   Hidden,
   List,
-  Typography
+  Typography,
+  ListItem
 } from '@material-ui/core';
 import {
   AlertCircle as AlertCircleIcon,
@@ -20,7 +21,8 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   // Users as UsersIcon,
-  Tag as TagIcon
+  Tag as TagIcon,
+  Truck as TruckIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -32,11 +34,25 @@ const user = {
 
 const items = [
   {
+    method: 'Link',
     href: '/additional',
     icon: TagIcon,
     title: '追加依頼'
   },
+  // {
+  //   href: '/invoice',
+  //   icon: TruckIcon,
+  //   title: '送状生成'
+  // },
   {
+    method: 'a',
+    href: 'https://bmypage.kuronekoyamato.co.jp/bmypage/servlet/jp.co.kuronekoyamato.wur.hmp.servlet.user.HMPLGI0010JspServlet',
+    icon: TruckIcon,
+    title: 'ヤマトB2ログイン',
+    target: 'blank'
+  },
+  {
+    method: 'Link',
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'ダッシュボード'
@@ -52,6 +68,7 @@ const items = [
   //   title: 'Products'
   // },
   {
+    method: 'Link',
     href: '/app/account',
     icon: UserIcon,
     title: 'アカウント'
@@ -62,16 +79,19 @@ const items = [
   //   title: 'Settings'
   // },
   {
+    method: 'Link',
     href: '/login',
     icon: LockIcon,
     title: 'ログイン'
   },
   {
+    method: 'Link',
     href: '/register',
     icon: UserPlusIcon,
     title: 'アカウント登録'
   },
   {
+    method: 'Link',
     href: '/404',
     icon: AlertCircleIcon,
     title: 'Error'
@@ -135,17 +155,27 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       <Divider />
       <Box sx={{ p: 2 }}>
         <List>
-          {items.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
-            />
-          ))}
+          {items.map((item) => {
+            return (
+              item.method === "Link" ?
+                <NavItem
+                  href={item.href}
+                  key={item.title}
+                  title={item.title}
+                  icon={item.icon}
+                />
+                :
+                <a
+                  href={item.href}
+                  target={item.target}
+                >
+                  {item.title}
+                </a>
+            )
+          })}
         </List>
       </Box>
-    </Box>
+    </Box >
   );
 
   return (

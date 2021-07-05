@@ -14,3 +14,8 @@ export const tagColor = color_number => {
     }
     return back_color
 }
+
+export const dateYMD = date => {
+    const dt = new Date(date)
+    return dt.getFullYear() + '/' + (dt.getMonth() + 1) + '/' + dt.getDate()
+}

@@ -151,7 +151,7 @@ nav {
     /* border: 3px solid #dadada; */
     border-radius: 5px;
     width:440px;
-    height: 300px;
+    height: 280px;
     margin:10px;
     line-height:2rem;
     font-size: 1.2rem;
@@ -253,11 +253,16 @@ nav {
     height: 50px;
     line-height:50px;
     font-weight: bold;
+    font-size: 1.1rem;
     /* background-color: yellow; */
 }
 
 .add__dueDate {
     font-weight: normal;
+}
+
+.add__vehicleImage {
+    width:30px;
 }
 
 .operButtonWrapp {
@@ -383,4 +388,3 @@ button {
 .address {
     font-size: 1rem;
 }
-

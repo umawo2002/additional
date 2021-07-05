@@ -13,9 +13,9 @@ class Previews extends Component {
     }
 
     componentDidMount() {
-        axios.get(`http://sv8/api/additional/getLabelsInfo/${this.props.cid}/${this.props.order}`)
+        axios.get(`http://sv8/api/additional/getLabelsInfo/${this.props.cid}/${this.props.order}/${this.props.cate}`)
             .then(response => {
-                console.log(response.data + ' Did ')
+                // console.log(response.data + ' Did ')
                 this.setState({ tagInfo: response.data })
             })
     }

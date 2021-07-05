@@ -13,6 +13,10 @@ import {
   Typography
 } from '@material-ui/core';
 
+import Cookie from 'universal-cookie';
+
+const cookie = new Cookie()
+
 const Login = () => {
   const navigate = useNavigate();
   const [employee, setEmployee] = useState('')
@@ -21,6 +25,37 @@ const Login = () => {
   // const onlogin = (e) => {
   //   alert(employee + ':' + password)
   // }
+
+  const handleSubmit = async () => {
+    try {
+      await fetch(
+        `http://127.0.0.1:8000/api/auth/jwt/create/`,
+        {
+          method: "POST",
+          body: JSON.stringify({ username: employee, password: password }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => {
+          console.log(res)
+          if (res.status === 400) {
+            throw "authentication failed"
+          } else if (res.ok) {
+            return res.json()
+          }
+        })
+        .then((data) => {
+          const options = { path: "/" }
+          cookie.set("access_token", data.access, options)
+        })
+      // router.push("/main-page")
+    } catch (err) {
+      alert(err)
+    }
+  }
+
 
   return (
     <>
@@ -43,7 +78,7 @@ const Login = () => {
               password: ''
             }}
             validationSchema={Yup.object().shape({
-              employee: Yup.string().min(6).required('社員番号を６文字以上で入力してください').max(255).required('社員番号を入力して下さい'),
+              employee: Yup.string().min(4).required('社員番号を６文字以上で入力してください').max(255).required('社員番号を入力して下さい'),
               password: Yup.string().max(255).required('パスワードを入力してください')
             })}
             onSubmit={() => {
@@ -77,10 +112,11 @@ const Login = () => {
                   name="employee"
                   // onBlur={handleBlur}
                   // onChange={handleChange}
-                  type="employee"
-                  // value={values.employee}
-                  variant="outlined"
                   onChange={(e) => setEmployee(e.target.value)}
+                  type="text"
+                  value={values.employee}
+                  variant="outlined"
+                // onChange={(e) => setEmployee(e.target.value)}
                 />
                 <TextField
                   error={Boolean(touched.password && errors.password)}
