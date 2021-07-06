@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 const AdditionalList = ({ src }) => {
   const componentRef = useRef();
   const { state, dispatch } = useContext(AppContext)
-  const id = src.id
+  // const id = src.id
   // const cid = src.cid
   // const order_no = src.order_no
   // const tei_name = src.tei_name
@@ -69,30 +69,6 @@ const AdditionalList = ({ src }) => {
   const classes = useStyles()
 
   let imgFile
-
-  // const tagPrintButton = e => {
-  //   dispatch({
-  //     type: ADD_EVENT_LOG,
-  //     tei_name: `${tei_name}様邸の荷札印刷完了しました。`,
-  //     operatedAt: '2021-05-05'
-  //   })
-  //   dispatch({
-  //     type: PRINT_TAG_DONE,
-  //     tag_print_done: true,
-  //     id,
-  //   })
-  //   console.log('荷札')
-  // }
-
-
-  // const invoicePrintButton = e => {
-  //   dispatch({
-  //     type: PRINT_INVOICE_CSV,
-  //     tag_print_done: true,
-  //     id,
-  //   })
-  //   console.log('送状')
-  // }
 
   // Accept process
   const acceptButton = val => {
@@ -103,23 +79,20 @@ const AdditionalList = ({ src }) => {
       "category": val.cate,
       "accepted_at": dt,
       "accepted_user": 1,
-      // "printed_at": "2021-06-16T18:07:00+09:00",
-      // "printed_user": 1,
-      // "printed_cnt": 1,
-      // "invoiced_at": "2021-06-15T18:07:00+09:00",
-      // "invoiced_user": 1
     })
       .then(response => { console.log("body:", response.data) })
-
+    // stateの書き換え
     dispatch(
       {
         type: ACCEPT_ORDER,
         order_no: val.order_no,
         cid: val.cid,
-        category: val.category
+        category: val.category,
+        accepted_at: dt,
+        accepted_user: 1
       }
     )
-
+    // Event Log の追加
     dispatch(
       {
         type: ADD_EVENT_LOG,
@@ -132,11 +105,59 @@ const AdditionalList = ({ src }) => {
 
   // Accept Data Delete Process
   const deleteButton = val => {
-    axios.delete('http://localhost:8000/api/tagInformations/3/', {
+    const dt = new Date()
+    axios.delete('http://localhost:8000/api/tagInformations/20/', {
       param: { "order_no": val.order_no }
     })
       .then(res => { console.log(res.data) })
+    console.log('ACCEPT_DELETE EVENT')
+
+    dispatch({
+      type: ADD_EVENT_LOG,
+      tei_name: val.tei_name,
+      operatedAt: dt
+    })
   }
+
+  const printButton = val => {
+    const dt = new Date()
+    axios.patch('http://localhost:8000/api/tagInformations/1/', {
+      printed_at: dt,
+      printed_user: '2'
+    })
+      .then(res => { console.log(res.data) })
+      .catch(function (error) {
+        console.log(error);
+      })
+
+    dispatch({
+      type: ADD_EVENT_LOG,
+      tei_name: val.tei_name,
+      operatedAt: dt
+    })
+    console.log('print')
+  }
+
+  // 処理完了にする
+  const orderDone = val => {
+    const dt = new Date()
+    axios.patch('http://localhost:8000/api/tagInformations/1/', {
+      completed_at: dt,
+      completed_user: '2'
+    })
+      .then(res => { console.log(res.data) })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+
+    dispatch({
+      type: ADD_EVENT_LOG,
+      tei_name: val.tei_name,
+      operatedAt: dt
+    })
+  }
+
 
   // Accept Data Update Process
   const updateButton = val => {
@@ -145,7 +166,6 @@ const AdditionalList = ({ src }) => {
     })
       .then(res => { console.log(res.data) })
   }
-
   const divStyle = {
     backgroundColor: tagColor(src.color_number),
   }
@@ -154,7 +174,8 @@ const AdditionalList = ({ src }) => {
   const is_iron = src.cate === "1" ? true : false
   const is_invoice = src.vehicle_type === "宅配便" ? true : false
   // const is_urgent = src.time_designation === "至急" ? true : false
-  const is_urgent = src.deadline === "至急" ? true : false
+  const is_urgent = src.deadline === "至急" && src.accepted_at === "" ? true : false
+  const is_accept = src.accepted_at !== "" ? true : false
 
   if (src.vehicle_type === "宅配便") {
     imgFile = "/static/images/deliveryVehicle/yamato.jpeg"
@@ -165,7 +186,8 @@ const AdditionalList = ({ src }) => {
 
 
   return (
-    <div className={'additionalInfoWrapper ' + (is_iron ? 'iron' : 'buzai') + ' ' + (is_urgent ? 'backgroundFlush red' : '')}>
+    <div className={'additionalInfoWrapper ' + (is_iron ? 'iron' : 'buzai') + ' ' +
+      (is_urgent ? 'backgroundFlush red' : '') + ' ' + (is_accept ? 'backgroundAccept' : '')}>
       <div className="additioalInfoHeader">
         <div className={'tagCnt ' + (is_iron ? 'tagCntIron' : 'tagCntBuzai')}>{src.cate_number_of_outputs}</div>
         <div style={divStyle} className={'tagNumber'}>
@@ -185,7 +207,6 @@ const AdditionalList = ({ src }) => {
               <td>
                 <button onClick={() => acceptButton(src)}> 受付</button>
                 <button onClick={() => deleteButton(src)}> 取消</button>
-                <button onClick={() => updateButton(src)}> 更新</button>
               </td>
               <td rowSpan='2' className='add__vehicleImage'>
                 <Avatar className={classes.square} src={imgFile} >
@@ -215,7 +236,7 @@ const AdditionalList = ({ src }) => {
         </table>
       </div>
       <div className="operButtonWrapp">
-        <Preview src={src} />
+        <Preview onClick={() => printButton(src)} src={src} />
         <ReactToPrint
           trigger={() => (
             <Button size="small" variant="outlined" color="primary">
@@ -228,10 +249,7 @@ const AdditionalList = ({ src }) => {
           <Previews ref={componentRef} cid={src.cid} order={src.order_no} cate={src.cate} />
         </div>
         {is_invoice && <Invoice src={src} />}
-        <Done src={src} />
-
-        {/* <button onClick={e => tagPrintButton()}>荷札</button> */}
-
+        <Done src={src} func={orderDone} />
 
         {/* <input type='file' onChange={(e) => handleChangeFile(e)} /> */}
         {/* <button onClick={() => uploadFile(dispatch, file)}>明細</button> */}
@@ -245,10 +263,6 @@ const AdditionalList = ({ src }) => {
           {/* <UploadFiles /> */}
           {/* <Component /> */}
         </div>
-
-        {/* <Route path='/tags'>
-          <TagLabels src={src} />
-        </Route> */}
       </div>
     </div>
   );
@@ -324,7 +338,7 @@ const Invoice = props => {
 //
 const Done = props => {
   const [open, setOpen] = useState(false)
-  const { src } = props
+  const { src, func } = props
 
   const dialogOpen = () => {
     setOpen(true)
@@ -356,7 +370,7 @@ const Done = props => {
           <Button onClick={dialogClose} color="secondary">
             キャンセル
           </Button>
-          <Button onClick={dialogClose} color="primary">
+          <Button onClick={() => func(src)} color="primary">
             完了
           </Button>
         </DialogActions>

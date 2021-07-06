@@ -23,14 +23,14 @@ import {
 const additionalData = (state = [], action) => {
     switch (action.type) {
         case ACCEPT_ORDER:
-            const data = state.filter(dat => dat.order_no === action.order_no ? state : { accepted_at: "2021-07-01 10:00:00" })
-
-            // return state.find((dat) => {
-            //     if (dat.order_no === action.order_no) {
-            //         dat.accepted_at = action.accepted_at
-            //     }
-            // })
-            return data
+            const newData = state.map((val, ind) => {
+                if (val.order_no === action.order_no && val.cid === action.cid && val.category === action.category) {
+                    val.accepted_at = action.accepted_at
+                    val.accepted_user = action.accepted_user
+                }
+                return val
+            })
+            return newData
         case ADDITIONAL_ORDER_FETCH:
             return action.additionalData
         case DELETE_ADDITIONAL_ORDER:
