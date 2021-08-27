@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Helmet } from 'react-helmet';
-import { Link as RouterLink } from 'react-router-dom'
+// import { Link as RouterLink } from 'react-router-dom'
 import axios from 'axios'
 
 import { ADDITIONAL_ORDER_FETCH } from '../actions'
@@ -43,9 +43,10 @@ const Additional = () => {
             </header> */}
             <main>
                 <div className={'additionalWrapper '} >
-                    {state.additionalData.map((src, idx) => (
+                    {state && state.additionalData.map((src, idx) => (
                         <AdditionalList key={idx} src={src} />
-                    ))}
+                    ))
+                    }
                 </div>
             </main>
         </>

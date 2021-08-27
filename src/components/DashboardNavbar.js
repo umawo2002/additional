@@ -28,7 +28,6 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
   const classes = useStyles()
 
-  console.log(rest)
   return (
     <AppBar
       elevation={0}

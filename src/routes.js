@@ -11,7 +11,8 @@ import Register from 'src/pages/Register';
 // import Settings from 'src/pages/Settings';
 
 import Additional from 'src/pages/Additional';
-import Invoice from 'src/pages/Invoice';
+// import Invoice from 'src/pages/Invoice';
+import OutOfLine from 'src/pages/OutOfLine'
 
 const routes = [
   {
@@ -31,7 +32,8 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: 'additional', element: <Additional /> },
-      { path: 'Invoice', element: <Invoice /> },
+      { path: 'line', element: <OutOfLine /> },
+      // { path: 'Invoice', element: <Invoice /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: '404', element: <NotFound /> },

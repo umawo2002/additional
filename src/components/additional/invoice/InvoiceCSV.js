@@ -1,13 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { CSVLink } from 'react-csv';
-import AppContext from '../../../contexts/AppContext'
+// import AppContext from '../../../contexts/AppContext'
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import NativeSelect from '@material-ui/core/NativeSelect';
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button'
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     formControl: {
-        // backgroundColor: 'red',
         minWidth: 200,
         width: 260,
     },
@@ -40,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     },
     comment: {
         width: '25ch',
+    },
+    place3: {
+        width: '10ch',
     }
 }));
 
@@ -56,6 +57,8 @@ const InvoiceCSV = ({ src }) => {
     const [distPrefectures, setDistPrefectures] = useState(src.prefectures)
     const [distPlace, setDistPlace] = useState(src.place)
     const [distPlace2, setDistPlace2] = useState('')
+    const [distPlace3, setDistPlace3] = useState(src.tei_name + '様　新築工事現場')
+    const [distPlace4, setDistPlace4] = useState(src.custname)
     const [distName, setDistName] = useState(src.dist_name)
     const [distTelNo, setDistTelNo] = useState(src.dist_tel_no)
     const [hinName, setHinName] = useState(src.cate_name)
@@ -101,6 +104,8 @@ const InvoiceCSV = ({ src }) => {
                 distTelNo: distTelNo,
                 distPostNo: distPostNo,
                 distAddress: distPrefectures + distPlace + distPlace2,
+                distPlace3: distPlace3,
+                distPlace4: distPlace4,
                 distName: distName,
                 distKeisyou: "様",
                 srcTelNo: srcTelNo,
@@ -164,26 +169,6 @@ const InvoiceCSV = ({ src }) => {
                                     />
                                 </MuiPickersUtilsProvider>
 
-
-                                {/* <InputLabel variant="standard" htmlFor="timeZoneCate">
-                                    配達時間帯
-                                </InputLabel>
-                                <NativeSelect
-                                    defaultValue={timeZoneCateStatus}
-                                    onChange={(e) => setTimeZoneCateStatus(e.target.value)}
-                                    inputProps={{
-                                        name: 'timeZoneCate',
-                                        id: 'timeZoneCate',
-                                    }}
-                                >
-                                    {timeZoneCate.map((n) =>
-                                        <option value={n.code}>
-                                            {n.name}
-                                        </option>
-                                    )
-                                    }
-                                </NativeSelect> */}
-
                                 <FormControl variant="outlined" className={classes.formControl}>
                                     <InputLabel id="simple-select-outlined-label" className={classes.selected}>配達時間帯</InputLabel>
                                     <Select className={classes.selected}
@@ -210,14 +195,18 @@ const InvoiceCSV = ({ src }) => {
                                 <TextField required label="お届け先住所(番地、その他)" defaultValue={distPlace2} onChange={(e) => setDistPlace2(e.target.value)} />
                             </Grid>
                             <Grid container item xs={12} spacing={1}>
+                                <TextField style={{ width: '51ch' }} label="ハウスメーカー名" defaultValue={distPlace4} onChange={(e) => setDistPlace4(e.target.value)} />
+                                <TextField style={{ width: '51ch' }} label="お届け先(その他)" defaultValue={distPlace3} onChange={(e) => setDistPlace3(e.target.value)} />
+                            </Grid>
+                            <Grid container item xs={12} spacing={1}>
                                 <TextField required label={'お届け先(' + src.orderer + ')'} defaultValue={distName} onChange={(e) => setDistName(e.target.value)} />
                                 <TextField required label={'お届け先電話番号(' + src.orderer + ')'} defaultValue={distTelNo} onChange={(e) => setDistTelNo(e.target.value)} />
                             </Grid>
                             <Grid container item xs={12} spacing={1}>
                                 <TextField required label="ご依頼主電話番号" defaultValue={srcTelNo} onChange={(e) => setSrcTelNo(e.target.value)} />
                                 <TextField required label="ご依頼主郵便番号" defaultValue={srcPostNo} onChange={(e) => setSrcPostNo(e.target.value)} />
-                                <TextField required label="ご依頼主住所" defaultValue={srcAddress} onChange={(e) => setSrcAddress(e.target.value)} />
-                                <TextField required label="ご依頼主名" defaultValue={srcName} onChange={(e) => setSrcName(e.target.value)} />
+                                <TextField style={{ width: '30ch' }} required label="ご依頼主住所" defaultValue={srcAddress} onChange={(e) => setSrcAddress(e.target.value)} />
+                                <TextField style={{ width: '20ch' }} required label="ご依頼主名" defaultValue={srcName} onChange={(e) => setSrcName(e.target.value)} />
                             </Grid>
                             <Grid container item xs={12} spacing={1}>
                                 <TextField required label="品名１" defaultValue={hinName} onChange={(e) => setHinName(e.target.value)} />

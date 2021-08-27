@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink, Route, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Button,
+  // Button,
   Divider,
   Drawer,
   Hidden,
   List,
   Typography,
-  ListItem
+  // ListItem
 } from '@material-ui/core';
 import {
   AlertCircle as AlertCircleIcon,
@@ -44,6 +44,12 @@ const items = [
   //   icon: TruckIcon,
   //   title: '送状生成'
   // },
+  {
+    method: 'Link',
+    href: '/line',
+    icon: TagIcon,
+    title: '北関東ライン'
+  },
   {
     method: 'a',
     href: 'https://bmypage.kuronekoyamato.co.jp/bmypage/servlet/jp.co.kuronekoyamato.wur.hmp.servlet.user.HMPLGI0010JspServlet',

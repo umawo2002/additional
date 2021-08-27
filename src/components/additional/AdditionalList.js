@@ -17,10 +17,10 @@ import axios from 'axios'
 import {
   ACCEPT_ORDER,
   ADD_EVENT_LOG,
-  DELETE_ADDITIONAL_ORDER,
-  PRINT_TAG_DONE,
-  CHOICE_CID,
-  PRINT_INVOICE_CSV
+  // DELETE_ADDITIONAL_ORDER,
+  // PRINT_TAG_DONE,
+  // CHOICE_CID,
+  // PRINT_INVOICE_CSV
 } from '../../actions'
 
 import AppContext from '../../contexts/AppContext'
@@ -36,7 +36,7 @@ import Previews from './prints/Previews'
 import InvoiceCSV from './invoice/InvoiceCSV'
 
 // import UploadFiles from './upload/UploadFiles'
-import Component from './upload/react-pdf'
+// import Component from './upload/react-pdf'
 
 // React forwardRef
 const Transition = forwardRef(function Transition(props, ref) {
@@ -61,13 +61,7 @@ const useStyles = makeStyles((theme) => ({
 const AdditionalList = ({ src }) => {
   const componentRef = useRef();
   const { state, dispatch } = useContext(AppContext)
-  // const id = src.id
-  // const cid = src.cid
-  // const order_no = src.order_no
-  // const tei_name = src.tei_name
-
   const classes = useStyles()
-
   let imgFile
 
   // Accept process
@@ -147,7 +141,6 @@ const AdditionalList = ({ src }) => {
     })
       .then(res => { console.log(res.data) })
       .catch(function (error) {
-        // handle error
         console.log(error);
       })
 
@@ -160,12 +153,12 @@ const AdditionalList = ({ src }) => {
 
 
   // Accept Data Update Process
-  const updateButton = val => {
-    axios.put('http://localhost:8000/api/tagInformations/3', {
-      param: { "order_no": val.order_no }
-    })
-      .then(res => { console.log(res.data) })
-  }
+  // const updateButton = val => {
+  //   axios.put('http://localhost:8000/api/tagInformations/3', {
+  //     param: { "order_no": val.order_no }
+  //   })
+  //     .then(res => { console.log(res.data) })
+  // }
   const divStyle = {
     backgroundColor: tagColor(src.color_number),
   }
@@ -182,8 +175,6 @@ const AdditionalList = ({ src }) => {
   } else if (src.vehicle_type === "赤帽") {
     imgFile = "/static/images/deliveryVehicle/akabou.jpg"
   }
-
-
 
   return (
     <div className={'additionalInfoWrapper ' + (is_iron ? 'iron' : 'buzai') + ' ' +
@@ -254,10 +245,6 @@ const AdditionalList = ({ src }) => {
         {/* <input type='file' onChange={(e) => handleChangeFile(e)} /> */}
         {/* <button onClick={() => uploadFile(dispatch, file)}>明細</button> */}
 
-        {/* <button>
-          <RouterLink to='/tags'>荷札</RouterLink>
-        </button> */}
-
 
         <div>
           {/* <UploadFiles /> */}
@@ -286,11 +273,11 @@ const Invoice = props => {
   const divStyle = {
     backgroundColor: tagColor(src.color_number),
   }
-  const divStyle2 = {
-    backgroundColor: "yellow",
-    dispaly: 'inlineBlock',
-    flexDirection: 'row'
-  }
+  // const divStyle2 = {
+  //   backgroundColor: "yellow",
+  //   dispaly: 'inlineBlock',
+  //   flexDirection: 'row'
+  // }
 
   return (
     <div>
@@ -300,7 +287,7 @@ const Invoice = props => {
       <Dialog
         open={open}
         onClose={dialogClose}
-        fullWidth="true"
+        // fullWidth="true"
         maxWidth="lg"
         aria-labelledby="customized-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -403,7 +390,7 @@ const Preview = props => {
       <Dialog
         open={open}
         onClose={dialogClose}
-        fullWidth="true"
+        // fullWidth="true"
         maxWidth="sm"
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState } from 'react'
 import { CSVLink } from 'react-csv';
 import AppContext from '../contexts/AppContext'
 import 'date-fns';
@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import ja from "date-fns/locale/ja"
 import { headers } from '../data/invoice_data'
-import { getDay } from 'date-fns';
+// import { getDay } from 'date-fns';
 import { dateYMD } from '../utils/common'
 
 const useStyles = makeStyles((theme) => ({
